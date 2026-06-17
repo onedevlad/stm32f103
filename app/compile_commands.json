@@ -1,0 +1,43 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/arm-none-eabi-gcc",
+      "-Os",
+      "-std=c99",
+      "-ggdb3",
+      "-mcpu=cortex-m3",
+      "-mthumb",
+      "-msoft-float",
+      "-fno-common",
+      "-ffunction-sections",
+      "-fdata-sections",
+      "-Wextra",
+      "-Wshadow",
+      "-Wno-unused-variable",
+      "-Wimplicit-function-declaration",
+      "-Wredundant-decls",
+      "-Wstrict-prototypes",
+      "-Wmissing-prototypes",
+      "-Wall",
+      "-Wundef",
+      "-I.",
+      "-I../shared",
+      "-I.",
+      "-I../libopencm3/include",
+      "-I.",
+      "-I../shared",
+      "-I.",
+      "-I../libopencm3/include",
+      "-DSTM32F1",
+      "-DSTM32F103C8T6",
+      "-I../libopencm3/include",
+      "-c",
+      "-o",
+      "bin/main.o",
+      "main.c"
+    ],
+    "directory": "/home/vlad/learn/stm32/lib_test/app",
+    "file": "/home/vlad/learn/stm32/lib_test/app/main.c",
+    "output": "/home/vlad/learn/stm32/lib_test/app/bin/main.o"
+  }
+]
