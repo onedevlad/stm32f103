@@ -1,0 +1,36 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug (launch OpenOCD)",
+      "cwd": "${workspaceFolder}/app",
+      "executable": "${workspaceFolder}/app/app.elf",
+      "request": "launch",
+      "type": "cortex-debug",
+      "servertype": "openocd",
+      "configFiles": [
+        "interface/stlink.cfg",
+        "target/stm32f1x.cfg"
+      ],
+      "device": "STM32F103C8",
+      "gdbPath": "arm-none-eabi-gdb",
+      "runToEntryPoint": "main",
+      "preLaunchTask": "build",
+      "liveWatch": {
+        "enabled": true,
+        "samplesPerSecond": 4
+      }
+    },
+    {
+      "name": "Attach (external OpenOCD)",
+      "cwd": "${workspaceFolder}/app",
+      "executable": "${workspaceFolder}/app/app.elf",
+      "request": "attach",
+      "type": "cortex-debug",
+      "servertype": "external",
+      "gdbTarget": "localhost:3333",
+      "device": "STM32F103C8",
+      "gdbPath": "arm-none-eabi-gdb"
+    }
+  ]
+}
