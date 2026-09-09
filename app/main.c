@@ -1,27 +1,23 @@
-#include "init/system.h"
-#include "init/init.h"
+#include <stdint.h>
 
-static void gpio_setup(void) {
-  // Clear CNF13[1:0] and MODE13[1:0]
-  GPIOC_CRH &= ~(0xF << 20);
-
-  // MODE13 = 10 (output 2 MHz), CNF13 = 00
-  GPIOC_CRH |=  (0x2 << 20);
-}
+/* #include "init/init_rcc_libopencm3.h" */
+#include "init/init_rcc.h"
+#include "init/gpio.h"
 
 static void sleep(uint32_t millis) {
-  volatile uint32_t i = 72000 / 12 * millis;
+  volatile uint32_t i = 72e3 / 12 * millis;
   while (i--) __asm__("nop");
 }
 
 int main(void) {
-  setup_rcc();
+  /* setup_rcc_libopencm3(); */
+  setup_rcc_72mhz();
   gpio_setup();
 
   while(1) {
-    GPIOC_ODR &= ~(1 << 13);
+    set_led_state(0);
     sleep(1000);
-    GPIOC_ODR |=  (1 << 13);
+    set_led_state(1);
     sleep(1000);
   }
 

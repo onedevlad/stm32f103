@@ -5,6 +5,9 @@ BUILD_DIR = bin
 # AFILES += api-asm.S
 SHARED_DIR = ../shared
 CFILES = main.c
+CFILES += init/init_rcc.c
+# CFILES += init/init_rcc_libopencm3.c
+CFILES += init/gpio.c
 OPT = -Os
 TGT_LDFLAGS += -Wl,-Map=$(PROJECT).map
 
