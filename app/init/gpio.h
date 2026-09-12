@@ -4,10 +4,14 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#define GPIOA_BASE 0x40010800
+#define GPIOA_CRH  (*(volatile uint32_t *)(GPIOA_BASE + 0x04))
+
 #define GPIOC_BASE 0x40011000
 #define GPIOC_CRH  (*(volatile uint32_t *)(GPIOC_BASE + 0x04))
 #define GPIOC_ODR  (*(volatile uint32_t *)(GPIOC_BASE + 0x0C))
 
+void enable_mco(void);
 void gpio_setup(void);
 void set_led_state(bool state);
 

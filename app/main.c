@@ -11,7 +11,8 @@ static void sleep(uint32_t millis) {
 
 int main(void) {
   /* setup_rcc_libopencm3(); */
-  setup_rcc_72mhz();
+  setup_rcc_8mhz();
+  enable_mco();
   gpio_setup();
 
   while(1) {

@@ -15,6 +15,8 @@
 #define FLASH_ACR_LATENCY_2WS 0x2 // 10
 #define FLASH_ACR_PRFTBE      (1 << 4) // 1 0000
 
+void setup_rcc_1khz(void);
+void setup_rcc_8mhz(void);
 void setup_rcc_72mhz(void);
 
 #endif
