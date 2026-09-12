@@ -9,14 +9,15 @@ static void sleep(uint32_t millis) {
 }
 
 int main(void) {
-  rcc_setup_8mhz();
-  enable_mco();
-  setup_led();
+  rcc_setup_72mhz();
+  gpio_enable_mco();
+  gpio_setup_led();
 
   while(1) {
-    set_led_state(0);
+    gpio_set_led_state(0);
     sleep(1000);
-    set_led_state(1);
+
+    gpio_set_led_state(1);
     sleep(1000);
   }
 
