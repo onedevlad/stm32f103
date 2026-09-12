@@ -1,5 +1,5 @@
 #include <libopencm3/stm32/rcc.h>
-#include "init_rcc_libopencm3.h"
+#include "rcc_libopencm3.h"
 
 #include <libopencm3//stm32/gpio.h>
 

@@ -2,4 +2,6 @@
 *.elf
 *.o
 *.d
-
+*.map
+compile_commands.json
+.cache/

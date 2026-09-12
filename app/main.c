@@ -1,7 +1,6 @@
 #include <stdint.h>
 
-/* #include "init/init_rcc_libopencm3.h" */
-#include "init/init_rcc.h"
+#include "init/rcc.h"
 #include "init/gpio.h"
 
 static void sleep(uint32_t millis) {
@@ -10,10 +9,9 @@ static void sleep(uint32_t millis) {
 }
 
 int main(void) {
-  /* setup_rcc_libopencm3(); */
-  setup_rcc_8mhz();
+  rcc_setup_8mhz();
   enable_mco();
-  gpio_setup();
+  setup_led();
 
   while(1) {
     set_led_state(0);

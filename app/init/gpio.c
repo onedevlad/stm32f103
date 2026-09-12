@@ -1,13 +1,19 @@
 #include <stdbool.h>
 #include "gpio.h"
+#include "init/rcc.h"
 
 void enable_mco(void) {
+  rcc_apb2_enable(RCC_APB2ENR_IOPAEN);
+  rcc_set_mco_source(RCC_CFGR_MCO_SYSCLK);
+
   GPIOA_CRH &= ~0xF;
   GPIOA_CRH |= 0x3; // MODE 11 - Output, 50MHz max
   GPIOA_CRH |= (0x2 << 2); // CNF 10 - AF output, Push-Pull
 }
 
-void gpio_setup(void) {
+void setup_led(void) {
+  rcc_apb2_enable(RCC_APB2ENR_IOPCEN);
+
   // Clear CNF13[1:0] and MODE13[1:0]
   GPIOC_CRH &= ~(0xF << 20);
 
