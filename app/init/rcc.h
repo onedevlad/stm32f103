@@ -30,15 +30,24 @@
 
 #define RCC_CFGR_PLLSRC_HSE_CLK  0x1
 #define RCC_CFGR_PPRE1_HCLK_DIV2 0x4
+#define RCC_CFGR_PPRE1_HCLK_DIV16 0x7
 
 #define RCC_CFGR_PPRE2_SHIFT 11
 #define RCC_CFGR_PPRE2 (0x7 << RCC_CFGR_PPRE2_SHIFT)
 
+#define RCC_CFGR_PPRE2_HCLK_NO_DIV 0x0
+#define RCC_CFGR_PPRE2_HCLK_DIV16 0x7
+
 #define RCC_CFGR_PPRE1_SHIFT 8
 #define RCC_CFGR_PPRE1 (0x7 << RCC_CFGR_PPRE1_SHIFT)
 
+#define RCC_CFGR_PPRE1_HCLK_NO_DIV 0x0
+
 #define RCC_CFGR_HPRE_SHIFT 4
 #define RCC_CFGR_HPRE (0xF << RCC_CFGR_HPRE_SHIFT)
+
+#define RCC_CFGR_HPRE_NO_DIV 0x0
+#define RCC_CFGR_HPRE_DIV512 0xF
 
 #define RCC_CFGR_SWS_SHIFT 2
 #define RCC_CFGR_SWS       (3 << RCC_CFGR_SWS_SHIFT)
@@ -78,7 +87,7 @@
 #define FLASH_ACR_LATENCY_2WS 0x02
 #define FLASH_ACR_PRFTBE      BIT4
 
-void rcc_setup_1khz(void);
+void rcc_setup_snail_pace(void);
 void rcc_setup_8mhz(void);
 void rcc_setup_72mhz(void);
 
