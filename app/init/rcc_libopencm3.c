@@ -1,7 +1,7 @@
 #include <libopencm3/stm32/rcc.h>
 #include "rcc_libopencm3.h"
 
-#include <libopencm3//stm32/gpio.h>
+#include <libopencm3/stm32/gpio.h>
 
 void setup_rcc_libopencm3(void) {
   rcc_osc_on(RCC_HSI); // Should already be ON by the time MCU starts up

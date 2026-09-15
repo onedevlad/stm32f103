@@ -2,14 +2,16 @@
 
 #include "init/rcc.h"
 #include "init/gpio.h"
+#include "init/systick.h"
 
 static void sleep(uint32_t millis) {
-  volatile uint32_t i = 72e3 / 12 * millis;
-  while (i--) __asm__("nop");
+  const uint32_t start = systick_get_ms();
+  while (systick_get_ms() - start < millis);
 }
 
 int main(void) {
   rcc_setup_72mhz();
+  systick_setup();
   gpio_enable_mco();
   gpio_setup_led();
 
@@ -18,7 +20,7 @@ int main(void) {
     sleep(1000);
 
     gpio_set_led_state(1);
-    sleep(1000);
+    sleep(500);
   }
 
   return 0;

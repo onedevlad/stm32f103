@@ -6,8 +6,8 @@ BUILD_DIR = bin
 SHARED_DIR = ../shared
 CFILES = main.c
 CFILES += init/rcc.c
-# CFILES += init/rcc_libopencm3.c
 CFILES += init/gpio.c
+CFILES += init/systick.c
 OPT = -Os
 TGT_LDFLAGS += -Wl,-Map=$(PROJECT).map
 
