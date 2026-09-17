@@ -52,10 +52,10 @@ OBJCOPY	= $(PREFIX)objcopy
 OBJDUMP	= $(PREFIX)objdump
 OOCD	?= openocd
 
-OPENCM3_INC = $(OPENCM3_DIR)/include
+# OPENCM3_INC = $(OPENCM3_DIR)/include
 
 # Inclusion of library header files
-INCLUDES += $(patsubst %,-I%, . $(OPENCM3_INC) )
+# INCLUDES += $(patsubst %,-I%, . $(OPENCM3_INC) )
 
 OBJS = $(CFILES:%.c=$(BUILD_DIR)/%.o)
 OBJS += $(CXXFILES:%.cxx=$(BUILD_DIR)/%.o)
@@ -81,7 +81,7 @@ TGT_CXXFLAGS += -Wextra -Wshadow -Wredundant-decls  -Weffc++
 
 TGT_ASFLAGS += $(OPT) $(ARCH_FLAGS) -ggdb3
 
-TGT_LDFLAGS += -T$(LDSCRIPT) -L$(OPENCM3_DIR)/lib -nostartfiles
+TGT_LDFLAGS += -T$(LDSCRIPT) -nostartfiles
 TGT_LDFLAGS += $(ARCH_FLAGS)
 TGT_LDFLAGS += -specs=nano.specs
 TGT_LDFLAGS += -Wl,--gc-sections
@@ -93,7 +93,7 @@ endif
 
 # Linker script generator fills this in for us.
 ifeq (,$(DEVICE))
-LDLIBS += -l$(OPENCM3_LIB)
+# LDLIBS += -l$(OPENCM3_LIB)
 endif
 # nosys is only in newer gcc-arm-embedded...
 #LDLIBS += -specs=nosys.specs
@@ -121,7 +121,7 @@ ifeq (,$(wildcard $(LDSCRIPT)))
 endif
 else
 # if linker script generator was used, make sure it's cleaned.
-GENERATED_BINS += $(LDSCRIPT)
+# GENERATED_BINS += $(LDSCRIPT)
 endif
 
 # Need a special rule to have a bin dir

@@ -17,10 +17,10 @@ int main(void) {
 
   while(1) {
     gpio_set_led_state(0);
-    sleep(1000);
+    sleep(100);
 
     gpio_set_led_state(1);
-    sleep(500);
+    sleep(100);
   }
 
   return 0;
