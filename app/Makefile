@@ -7,6 +7,7 @@ SHARED_DIR = ../shared
 CFILES = main.c
 CFILES += init/rcc.c
 CFILES += init/gpio.c
+CFILES += init/tim.c
 CFILES += init/systick.c
 CFILES += init/startup.c
 OPT = -Os

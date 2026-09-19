@@ -5,7 +5,11 @@ static volatile uint32_t ms_counter;
 void systick_setup(void) {
   STK_LOAD = 72000 - 1;
   STK_VAL = 0;
-  STK_CTRL |= (STK_CTRL_ENABLE | STK_CTRL_TICKINT | STK_CTRL_CLKSOURCE);
+  STK_CTRL |= (
+    STK_CTRL_ENABLE |
+    STK_CTRL_TICKINT |
+    (STK_CTRL_CLKSOURCE_AHB << STK_CTRL_CLKSOURCE_SHIFT)
+  );
 }
 
 void sys_tick_handler(void) {

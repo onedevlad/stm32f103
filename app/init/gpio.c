@@ -4,6 +4,7 @@
 
 #define MCO_PIN 8  // PA8
 #define LED_PIN 13 // PC13
+#define PWM_PIN 0  // PA0 (TIM2_CH1)
 
 void gpio_configure_pin(uint32_t port, uint32_t pin, uint32_t mode, uint32_t cnf) {
   const uint32_t p = pin & 0xF; // Clamp to 0-15
@@ -32,4 +33,10 @@ void gpio_set_led_state(bool state) {
   GPIOC_BSRR = state
     ? (1 << LED_PIN)         // Bit Set
     : (1 << (LED_PIN + 16)); // Bit Reset
+}
+
+void gpio_setup_pwm(void) {
+  rcc_apb1_enable(RCC_APB1ENR_TIM2EN);
+  rcc_apb2_enable(RCC_APB2ENR_IOPAEN);
+  gpio_configure_pin(GPIOA_BASE, PWM_PIN, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_AF_PP);
 }

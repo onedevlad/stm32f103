@@ -35,5 +35,6 @@ void gpio_configure_pin(uint32_t port_base, uint32_t pin, uint32_t mode, uint32_
 void gpio_enable_mco(void);
 void gpio_setup_led(void);
 void gpio_set_led_state(bool state);
+void gpio_setup_pwm(void);
 
 #endif

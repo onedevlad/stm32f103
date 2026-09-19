@@ -41,6 +41,10 @@ void rcc_apb2_enable(uint32_t source) {
   RCC_APB2ENR |= RCC_APB2ENR_VALID_BITS & source;
 }
 
+void rcc_apb1_enable(uint32_t source) {
+  RCC_APB1ENR |= RCC_APB1ENR_VALID_BITS & source;
+}
+
 void rcc_set_mco_source(uint32_t source) {
   const uint32_t bits = (RCC_CFGR_MCO >> RCC_CFGR_MCO_SHIFT) & source;
   RCC_CFGR = (RCC_CFGR & ~RCC_CFGR_MCO) | (bits << RCC_CFGR_MCO_SHIFT);

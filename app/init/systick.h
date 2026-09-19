@@ -16,7 +16,8 @@
 #define STK_CTRL_TICKINT   BIT1 // 1 = Generate an interrupt on reaching 0
 #define STK_CTRL_ENABLE    BIT0 // 1 = Counter enabled
 
-#define STK_CTRL_CLKSOURCE_AHB      STK_CTRL_CLKSOURCE
+#define STK_CTRL_CLKSOURCE_SHIFT    2
+#define STK_CTRL_CLKSOURCE_AHB      0x1
 #define STK_CTRL_CLKSOURCE_AHB_DIV8 0x0
 
 #define STK_RELOAD_MASK 0x00FFFFFF // Systick is only 24bit wide

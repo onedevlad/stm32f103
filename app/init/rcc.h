@@ -8,6 +8,7 @@
 #define RCC_CR      MMIO(RCC_BASE + 0x00)
 #define RCC_CFGR    MMIO(RCC_BASE + 0x04)
 #define RCC_APB2ENR MMIO(RCC_BASE + 0x18)
+#define RCC_APB1ENR MMIO(RCC_BASE + 0x1C)
 
 // RCC_CR Values
 #define RCC_CR_PLLRDY  BIT25
@@ -69,6 +70,12 @@
   RCC_APB2ENR_IOPEEN  \
 )
 
+// RCC_APB1ENR: APB1 peripheral clock enable register 
+#define RCC_APB1ENR_TIM2EN BIT0
+#define RCC_APB1ENR_VALID_BITS (\
+  RCC_APB1ENR_TIM2EN \
+)
+
 // SWS: System clock switch status
 #define RCC_CFGR_SWS_SYSCLKSEL_HSICLK		0x0
 #define RCC_CFGR_SWS_SYSCLKSEL_HSECLK		0x1
@@ -92,6 +99,7 @@ void rcc_setup_8mhz(void);
 void rcc_setup_72mhz(void);
 
 void rcc_apb2_enable(uint32_t bits);
+void rcc_apb1_enable(uint32_t bits);
 void rcc_set_mco_source(uint32_t source);
 
 #endif
