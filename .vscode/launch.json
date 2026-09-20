@@ -13,6 +13,7 @@
         "target/stm32f1x.cfg"
       ],
       "device": "STM32F103C8",
+      "svdFile": "${workspaceFolder}/app/stm32f103.svd",
       "gdbPath": "arm-none-eabi-gdb",
       "runToEntryPoint": "main",
       "preLaunchTask": "build",
@@ -30,6 +31,7 @@
       "servertype": "external",
       "gdbTarget": "localhost:3333",
       "device": "STM32F103C8",
+      "svdFile": "${workspaceFolder}/app/stm32f103.svd",
       "gdbPath": "arm-none-eabi-gdb"
     }
   ]
