@@ -2,20 +2,33 @@
 #define GPIO_H
 
 #include <stdbool.h>
+#include <stddef.h>
 #include "memorymap.h"
 #include "common.h"
 
-// GPIO Registers
-#define GPIOA_CRH  MMIO(GPIOA_BASE + 0x04)
-#define GPIOC_CRH  MMIO(GPIOC_BASE + 0x04)
-#define GPIOC_BSRR MMIO(GPIOC_BASE + 0x10)
+typedef struct {
+  volatile uint32_t CRL;   // 0x00 pins 0-7 config
+  volatile uint32_t CRH;   // 0x04 pins 8-15 config
+  volatile uint32_t IDR;   // 0x08 input data
+  volatile uint32_t ODR;   // 0x0C output data
+  volatile uint32_t BSRR;  // 0x10 bit set/reset
+  volatile uint32_t BRR;   // 0x14 bit reset
+  volatile uint32_t LCKR;  // 0x18 config lock
+} gpio_t;
 
-// GPIOA_CRH/L
-#define GPIO_CRL_OFFSET  0x00
-#define GPIO_CRH_OFFSET  0x04
-#define GPIO_CR_PIN_MASK 0xF // width of one pin's MODE+CNF field
-#define GPIO_MODE_SHIFT  0
-#define GPIO_CNF_SHIFT   2
+_Static_assert(offsetof(gpio_t, LCKR) == 0x18, "gpio_t layout wrong");
+
+#define GPIOA ((gpio_t *)GPIOA_BASE)
+#define GPIOC ((gpio_t *)GPIOC_BASE)
+
+// CRL/CRH: each pin owns a 4-bit nibble, MODE in [1:0] and CNF in [3:2]
+#define GPIO_CR_PIN  GENMASK(3, 0)
+#define GPIO_CR_MODE GENMASK(1, 0)
+#define GPIO_CR_CNF  GENMASK(3, 2)
+
+// BSRR: write-only. Bits 15:0 set pin n, bits 31:16 reset pin n
+#define GPIO_BSRR_BS(n) BIT(n)
+#define GPIO_BSRR_BR(n) BIT((n) + 16)
 
 // GPIO_CRH/L Values
 #define GPIO_CNF_INPUT_ANALOG 0x0
@@ -31,7 +44,7 @@
 #define GPIO_MODE_OUTPUT_2_MHZ  0x2
 #define GPIO_MODE_OUTPUT_50_MHZ 0x3
 
-void gpio_configure_pin(uint32_t port_base, uint32_t pin, uint32_t mode, uint32_t cnf);
+void gpio_configure_pin(gpio_t *port, uint32_t pin, uint32_t mode, uint32_t cnf);
 void gpio_enable_mco(void);
 void gpio_setup_led(void);
 void gpio_set_led_state(bool state);

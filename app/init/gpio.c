@@ -6,37 +6,37 @@
 #define LED_PIN 13 // PC13
 #define PWM_PIN 0  // PA0 (TIM2_CH1)
 
-void gpio_configure_pin(uint32_t port, uint32_t pin, uint32_t mode, uint32_t cnf) {
+void gpio_configure_pin(gpio_t *port, uint32_t pin, uint32_t mode, uint32_t cnf) {
   const uint32_t p = pin & 0xF; // Clamp to 0-15
-  const uint32_t offset = (p < 8) ? GPIO_CRL_OFFSET : GPIO_CRH_OFFSET;
-  const uint32_t shift = ((p < 8) ? p : p - 8) * 4;
-  const uint32_t mask = GPIO_CR_PIN_MASK << shift;
-  const uint32_t config = ((mode & 0x3) << GPIO_MODE_SHIFT) | ((cnf & 0x3) << GPIO_CNF_SHIFT);
+  volatile uint32_t *cr = (p < 8) ? &port->CRL : &port->CRH;
+  const uint32_t shift = (p & 7) * 4;
+  const uint32_t config =
+    FIELD_PREP(GPIO_CR_MODE, mode) |
+    FIELD_PREP(GPIO_CR_CNF, cnf);
 
-  volatile uint32_t *cr = (volatile uint32_t *)(port + offset);
-  *cr = (*cr & ~mask) | (config << shift);
+  MODIFY_REG(*cr, GPIO_CR_PIN << shift, config << shift);
 }
 
 void gpio_enable_mco(void) {
   rcc_apb2_enable(RCC_APB2ENR_IOPAEN);
   rcc_set_mco_source(RCC_CFGR_MCO_SYSCLK);
 
-  gpio_configure_pin(GPIOA_BASE, MCO_PIN, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_AF_PP);
+  gpio_configure_pin(GPIOA, MCO_PIN, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_AF_PP);
 }
 
 void gpio_setup_led(void) {
   rcc_apb2_enable(RCC_APB2ENR_IOPCEN);
-  gpio_configure_pin(GPIOC_BASE, LED_PIN, GPIO_MODE_OUTPUT_2_MHZ, GPIO_CNF_OUTPUT_PP);
+  gpio_configure_pin(GPIOC, LED_PIN, GPIO_MODE_OUTPUT_2_MHZ, GPIO_CNF_OUTPUT_PP);
 }
 
 void gpio_set_led_state(bool state) {
-  GPIOC_BSRR = state
-    ? (1 << LED_PIN)         // Bit Set
-    : (1 << (LED_PIN + 16)); // Bit Reset
+  GPIOC->BSRR = state
+    ? GPIO_BSRR_BS(LED_PIN)
+    : GPIO_BSRR_BR(LED_PIN);
 }
 
 void gpio_setup_pwm(void) {
   rcc_apb1_enable(RCC_APB1ENR_TIM2EN);
   rcc_apb2_enable(RCC_APB2ENR_IOPAEN);
-  gpio_configure_pin(GPIOA_BASE, PWM_PIN, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_AF_PP);
+  gpio_configure_pin(GPIOA, PWM_PIN, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_AF_PP);
 }

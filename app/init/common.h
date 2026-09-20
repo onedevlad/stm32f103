@@ -4,37 +4,18 @@
 #include <stdint.h>
 
 #define MMIO(addr) (*(volatile uint32_t *)(addr))
-#define BIT0  (1U << 0U)
-#define BIT1  (1U << 1U)
-#define BIT2  (1U << 2U)
-#define BIT3  (1U << 3U)
-#define BIT4  (1U << 4U)
-#define BIT5  (1U << 5U)
-#define BIT6  (1U << 6U)
-#define BIT7  (1U << 7U)
-#define BIT8  (1U << 8U)
-#define BIT9  (1U << 9U)
-#define BIT10 (1U << 10U)
-#define BIT11 (1U << 11U)
-#define BIT12 (1U << 12U)
-#define BIT13 (1U << 13U)
-#define BIT14 (1U << 14U)
-#define BIT15 (1U << 15U)
-#define BIT16 (1U << 16U)
-#define BIT17 (1U << 17U)
-#define BIT18 (1U << 18U)
-#define BIT19 (1U << 19U)
-#define BIT20 (1U << 20U)
-#define BIT21 (1U << 21U)
-#define BIT22 (1U << 22U)
-#define BIT23 (1U << 23U)
-#define BIT24 (1U << 24U)
-#define BIT25 (1U << 25U)
-#define BIT26 (1U << 26U)
-#define BIT27 (1U << 27U)
-#define BIT28 (1U << 28U)
-#define BIT29 (1U << 29U)
-#define BIT30 (1U << 30U)
-#define BIT31 (1U << 31U)
+#define BIT(n) (1U << (n))
+
+// Mask covering bits h..l inclusive, matching the datasheets "Bits 6:4"
+#define GENMASK(h, l) ((~0U << (l)) & (~0U) >> (31 - (h)))
+
+// Shift val into position described by the mask. The shift is
+// derived from the mask, and GCC folds it to a constant
+#define FIELD_PREP(mask, val) (((val) << __builtin_ctz(mask)) & (mask))
+
+#define FIELD_GET(mask, reg) (((reg) & (mask)) >> __builtin_ctz(mask))
+
+// Read, modify, write loop
+#define MODIFY_REG(reg, clear, set) ((reg) = ((reg) & ~(clear)) | (set))
 
 #endif
