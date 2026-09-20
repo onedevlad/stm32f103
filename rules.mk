@@ -1,15 +1,10 @@
 # This version of rules.mk expects the following to be defined before
 # inclusion..
 ### REQUIRED ###
-# OPENCM3_DIR - duh
 # PROJECT - will be the basename of the output elf, eg usb-gadget0-stm32f4disco
 # CFILES - basenames only, eg main.c blah.c
 # CXXFILES - same for C++ files. Must have cxx suffix!
-# DEVICE - the full device name, eg stm32f405ret6
-#  _or_
-# LDSCRIPT - full path, eg ../../examples/stm32/f4/stm32f4-discovery/stm32f4-discovery.ld
-# OPENCM3_LIB - the basename, eg: opencm3_stm32f4
-# OPENCM3_DEFS - the target define eg: -DSTM32F4
+# LDSCRIPT - path to the linker script, eg stm32f103c8t6.ld
 # ARCH_FLAGS - eg, -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16
 #    (ie, the full set of cpu arch flags, _none_ are defined in this file)
 #
@@ -27,7 +22,6 @@
 ### TODO/FIXME/notes ###
 # No support for stylecheck.
 # No support for BMP/texane/random flash methods, no plans either
-# No support for magically finding the library.
 # C++ hasn't been actually tested with this..... sorry bout that. ;)
 # Second expansion/secondary not set, add this if you need them.
 
@@ -52,11 +46,6 @@ OBJCOPY	= $(PREFIX)objcopy
 OBJDUMP	= $(PREFIX)objdump
 OOCD	?= openocd
 
-# OPENCM3_INC = $(OPENCM3_DIR)/include
-
-# Inclusion of library header files
-# INCLUDES += $(patsubst %,-I%, . $(OPENCM3_INC) )
-
 OBJS = $(CFILES:%.c=$(BUILD_DIR)/%.o)
 OBJS += $(CXXFILES:%.cxx=$(BUILD_DIR)/%.o)
 OBJS += $(AFILES:%.S=$(BUILD_DIR)/%.o)
@@ -64,7 +53,6 @@ GENERATED_BINS = $(PROJECT).elf $(PROJECT).bin $(PROJECT).map $(PROJECT).list $(
 
 TGT_CPPFLAGS += -MD
 TGT_CPPFLAGS += -Wall -Wundef $(INCLUDES)
-TGT_CPPFLAGS += $(INCLUDES) $(OPENCM3_DEFS)
 
 TGT_CFLAGS += $(OPT) $(CSTD) -ggdb3
 TGT_CFLAGS += $(ARCH_FLAGS)
@@ -91,10 +79,6 @@ ifeq ($(V),99)
 TGT_LDFLAGS += -Wl,--print-gc-sections
 endif
 
-# Linker script generator fills this in for us.
-ifeq (,$(DEVICE))
-# LDLIBS += -l$(OPENCM3_LIB)
-endif
 # nosys is only in newer gcc-arm-embedded...
 #LDLIBS += -specs=nosys.specs
 LDLIBS += -Wl,--start-group -lc -lgcc -lnosys -Wl,--end-group
@@ -113,15 +97,8 @@ LDLIBS += -Wl,--start-group -lc -lgcc -lnosys -Wl,--end-group
 all: $(PROJECT).elf $(PROJECT).bin
 flash: $(PROJECT).flash
 
-# error if not using linker script generator
-ifeq (,$(DEVICE))
-$(LDSCRIPT):
 ifeq (,$(wildcard $(LDSCRIPT)))
-    $(error Unable to find specified linker script: $(LDSCRIPT))
-endif
-else
-# if linker script generator was used, make sure it's cleaned.
-# GENERATED_BINS += $(LDSCRIPT)
+$(error Unable to find specified linker script: $(LDSCRIPT))
 endif
 
 # Need a special rule to have a bin dir
@@ -140,7 +117,7 @@ $(BUILD_DIR)/%.o: %.S
 	@mkdir -p $(dir $@)
 	$(Q)$(CC) $(TGT_ASFLAGS) $(ASFLAGS) $(TGT_CPPFLAGS) $(CPPFLAGS) -o $@ -c $<
 
-$(PROJECT).elf: $(OBJS) $(LDSCRIPT) $(LIBDEPS)
+$(PROJECT).elf: $(OBJS) $(LDSCRIPT)
 	@printf "  LD\t$@\n"
 	$(Q)$(LD) $(TGT_LDFLAGS) $(LDFLAGS) $(OBJS) $(LDLIBS) -o $@
 

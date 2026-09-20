@@ -19,6 +19,5 @@ OOCD_TARGET = stm32f1x
 # You shouldn't have to edit anything below here.
 VPATH += $(SHARED_DIR)
 INCLUDES += $(patsubst %,-I%, . $(SHARED_DIR))
-OPENCM3_DIR=../libopencm3
 
 include ../rules.mk
