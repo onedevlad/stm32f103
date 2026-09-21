@@ -47,7 +47,10 @@ _Static_assert(offsetof(gpio_t, LCKR) == 0x18, "gpio_t layout wrong");
 void gpio_configure_pin(gpio_t *port, uint32_t pin, uint32_t mode, uint32_t cnf);
 void gpio_enable_mco(void);
 void gpio_setup_led(void);
-void gpio_set_led_state(bool state);
+void gpio_set_led_state(bool on);
 void gpio_setup_pwm(void);
+
+void gpio_setup_btn(void);
+bool gpio_is_btn_pressed(void);
 
 #endif
