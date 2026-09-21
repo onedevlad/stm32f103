@@ -1,13 +1,18 @@
 #include <stdbool.h>
-#include "gpio.h"
-#include "rcc.h"
-
-#define MCO_PIN 8  // PA8
-#define LED_PIN 13 // PC13
-#define PWM_PIN 0  // PA0 (TIM2_CH1)
-#define BTN_PIN 1  // PA1
+#include "lib/gpio.h"
+#include "lib/rcc.h"
 
 void gpio_configure_pin(gpio_t *port, uint32_t pin, uint32_t mode, uint32_t cnf) {
+  // Clock configuration
+  _Static_assert(
+    GPIOC_BASE - GPIOA_BASE == 2 * 0x400,
+    "Each group of GPIO registers must be 0x400 bytes apart"
+  );
+  const uint32_t index = ((uintptr_t)port - GPIOA_BASE) / 0x400; // A=0, B=1, C=2...
+  rcc_apb2_enable(RCC_APB2ENR_IOPAEN << index);
+  (void)RCC->APB2ENR; // read back so the clock is running before first access
+
+  // Pin configuration
   const uint32_t p = pin & 0xF; // Clamp to 0-15
   volatile uint32_t *cr = (p < 8) ? &port->CRL : &port->CRH;
   const uint32_t shift = (p & 7) * 4;
@@ -18,36 +23,11 @@ void gpio_configure_pin(gpio_t *port, uint32_t pin, uint32_t mode, uint32_t cnf)
   MODIFY_REG(*cr, GPIO_CR_PIN << shift, config << shift);
 }
 
-void gpio_enable_mco(void) {
-  rcc_apb2_enable(RCC_APB2ENR_IOPAEN);
-  rcc_set_mco_source(RCC_CFGR_MCO_SYSCLK);
-
-  gpio_configure_pin(GPIOA, MCO_PIN, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_AF_PP);
+void gpio_write_pin(gpio_t *port, uint32_t pin, bool high) {
+  const uint32_t p = pin & 0xF; // clamp to 0-15
+  port->BSRR = high ? GPIO_BSRR_BS(p) : GPIO_BSRR_BR(p);
 }
 
-void gpio_setup_led(void) {
-  rcc_apb2_enable(RCC_APB2ENR_IOPCEN);
-  gpio_configure_pin(GPIOC, LED_PIN, GPIO_MODE_OUTPUT_2_MHZ, GPIO_CNF_OUTPUT_PP);
-}
-
-void gpio_set_led_state(bool on) {
-  GPIOC->BSRR = on
-    ? GPIO_BSRR_BR(LED_PIN) // active low: LED on = pin low
-    : GPIO_BSRR_BS(LED_PIN);
-}
-
-void gpio_setup_pwm(void) {
-  rcc_apb1_enable(RCC_APB1ENR_TIM2EN);
-  rcc_apb2_enable(RCC_APB2ENR_IOPAEN);
-  gpio_configure_pin(GPIOA, PWM_PIN, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_AF_PP);
-}
-
-void gpio_setup_btn(void) {
-  rcc_apb2_enable(RCC_APB2ENR_IOPAEN);
-  gpio_configure_pin(GPIOA, BTN_PIN, GPIO_MODE_INPUT, GPIO_CNF_INPUT_PUPD);
-  GPIOA->BSRR = GPIO_BSRR_BS(BTN_PIN); // ODR=1 -> pull-up
-}
-
-bool gpio_is_btn_pressed(void) {
-  return !(GPIOA->IDR & BIT(BTN_PIN));
+bool gpio_read_pin(gpio_t *port, uint32_t pin) {
+  return port->IDR & BIT(pin & 0xF);
 }

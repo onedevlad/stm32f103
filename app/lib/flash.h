@@ -3,8 +3,8 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include "memorymap.h"
-#include "common.h"
+#include "lib/memorymap.h"
+#include "lib/common.h"
 
 typedef struct {
   volatile uint32_t ACR;     // 0x00

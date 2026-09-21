@@ -1,6 +1,9 @@
-#include "tim.h"
+#include "lib/tim.h"
+#include "lib/rcc.h"
 
 void tim2_pwm_setup(uint32_t psc, uint32_t arr) {
+  rcc_apb1_enable(RCC_APB1ENR_TIM2EN); // TIM2 is on APB1
+
   TIM2->PSC = psc - 1;
   TIM2->ARR = arr - 1;
 

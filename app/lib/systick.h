@@ -2,8 +2,8 @@
 #define INC_SYSTICK_H
 
 #include <stddef.h>
-#include "memorymap.h"
-#include "common.h"
+#include "lib/memorymap.h"
+#include "lib/common.h"
 
 typedef struct {
   volatile uint32_t CTRL;  // 0x00

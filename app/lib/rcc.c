@@ -1,5 +1,5 @@
-#include "rcc.h"
-#include "flash.h"
+#include "lib/rcc.h"
+#include "lib/flash.h"
 
 static uint32_t rcc_get_sysclk_source(void) {
   return FIELD_GET(RCC_CFGR_SWS, RCC->CFGR);

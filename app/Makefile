@@ -10,6 +10,10 @@ CFILES += lib/gpio.c
 CFILES += lib/tim.c
 CFILES += lib/systick.c
 CFILES += lib/startup.c
+
+CFILES += misc/mco.c
+CFILES += led/breathe.c
+CFILES += led/toggle.c
 OPT = -Os
 TGT_LDFLAGS += -Wl,-Map=$(PROJECT).map
 
