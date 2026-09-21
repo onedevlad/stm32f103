@@ -1,9 +1,9 @@
 #include <stdint.h>
 
-#include "init/rcc.h"
-#include "init/gpio.h"
-#include "init/systick.h"
-#include "init/tim.h"
+#include "lib/rcc.h"
+#include "lib/gpio.h"
+#include "lib/systick.h"
+#include "lib/tim.h"
 
 #define PWM_PERIOD (1000)
 static int32_t duty = 0;
