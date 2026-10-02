@@ -63,12 +63,14 @@ _Static_assert(offsetof(rcc_t, CSR) == 0x24, "rcc_t layout wrong");
 #define RCC_APB2ENR_IOPCEN BIT(4)
 #define RCC_APB2ENR_IOPBEN BIT(3)
 #define RCC_APB2ENR_IOPAEN BIT(2)
+#define RCC_APB2ENR_AFIOEN BIT(0)
 #define RCC_APB2ENR_VALID_BITS (\
   RCC_APB2ENR_IOPAEN |\
   RCC_APB2ENR_IOPBEN |\
   RCC_APB2ENR_IOPCEN |\
   RCC_APB2ENR_IOPDEN |\
-  RCC_APB2ENR_IOPEEN  \
+  RCC_APB2ENR_IOPEEN |\
+  RCC_APB2ENR_AFIOEN  \
 )
 
 // RCC_APB1ENR: APB1 peripheral clock enable register 

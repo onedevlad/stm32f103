@@ -7,6 +7,7 @@ SHARED_DIR = ../shared
 CFILES = main.c
 CFILES += lib/rcc.c
 CFILES += lib/gpio.c
+CFILES += lib/exti.c
 CFILES += lib/tim.c
 CFILES += lib/systick.c
 CFILES += lib/startup.c

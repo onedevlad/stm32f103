@@ -16,6 +16,11 @@ typedef struct {
   volatile uint32_t LCKR;  // 0x18 config lock
 } gpio_t;
 
+typedef struct {
+  gpio_t *port;
+  uint8_t pin; // 0-15
+} pin_t;
+
 _Static_assert(offsetof(gpio_t, LCKR) == 0x18, "gpio_t layout wrong");
 
 #define GPIOA ((gpio_t *)GPIOA_BASE)
@@ -44,8 +49,8 @@ _Static_assert(offsetof(gpio_t, LCKR) == 0x18, "gpio_t layout wrong");
 #define GPIO_MODE_OUTPUT_2_MHZ  0x2
 #define GPIO_MODE_OUTPUT_50_MHZ 0x3
 
-void gpio_configure_pin(gpio_t *port, uint32_t pin, uint32_t mode, uint32_t cnf);
-void gpio_write_pin(gpio_t *port, uint32_t pin, bool high);
-bool gpio_read_pin(gpio_t *port, uint32_t pin);
+void gpio_configure_pin(pin_t pin, uint32_t mode, uint32_t cnf);
+void gpio_write_pin(pin_t pin, bool high);
+bool gpio_read_pin(pin_t pin);
 
 #endif

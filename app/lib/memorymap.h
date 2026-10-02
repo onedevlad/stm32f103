@@ -5,9 +5,12 @@
 #define FLASH_BASE 0x40022000
 #define GPIOA_BASE 0x40010800
 #define GPIOC_BASE 0x40011000
+#define EXTI_BASE  0x40010400
+#define AFIO_BASE  0x40010000
 #define TIM2_BASE  0x40000000
 
 // Same address on all Cortex M3 chips
 #define SYSTICK_BASE 0xE000E010
+#define NVIC_ISER0   0xE000E100
 
 #endif

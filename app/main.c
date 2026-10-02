@@ -2,6 +2,7 @@
 
 #include "lib/rcc.h"
 #include "lib/systick.h"
+#include "lib/exti.h"
 
 #include "led/breathe.h"
 #include "led/toggle.h"
@@ -15,9 +16,10 @@ int main(void) {
   setup_led_breath();
   setup_led_toggle();
 
+  exti_setup();
+
   while(1) {
     run_led_breath();
-    run_led_toggle();
   }
 
   return 0;

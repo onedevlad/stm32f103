@@ -7,6 +7,8 @@ void sys_tick_handler(void);
 
 static void default_handler(void);
 
+void exti1_handler(void);
+
 __attribute__((section(".vectors"), used))
 void (* const vector_table[])(void) = {
   (void (*)(void))&_stack, // 0: Initial SP
@@ -22,6 +24,15 @@ void (* const vector_table[])(void) = {
   0,                       // 13: Reserved
   default_handler,         // 14: PendSV
   sys_tick_handler,        // 15: SysTick
+
+  0,                       // 16: IRQ0: WWDG
+  0,                       // 17: IRQ1: PVD
+  0,                       // 18: IRQ2: TAMPER
+  0,                       // 19: IRQ3: RTC
+  0,                       // 20: IRQ4: FLASH
+  0,                       // 21: IRQ5: RCC
+  0,                       // 22: IRQ6: EXTI0
+  exti1_handler,           // 23: IRQ7: EXTI1
 };
 
 static void default_handler(void) { while(1); }
